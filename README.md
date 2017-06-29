@@ -9,3 +9,5 @@ npm link
 use "dd" command in cli
 
 dd -help  shows all commands
+
+# notes

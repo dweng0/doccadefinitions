@@ -1,33 +1,20 @@
 module.exports = function(grunt) {
 
   grunt.initConfig({
-   tsc: {
-        options: {
-            // global options 
-        },
-        task_name: {
-            options: {
-                // task options 
-            },
-            files: [{
-                expand : true,
-                dest   : "dist/out-tsc",
-                cwd    : "source",
-                ext    : ".js",
-                src    : [
-                    "*.ts",
-                    "!*.d.ts"
-                ]
-            }]
+    exec:{
+        compile:{
+            command:"tsc",
+            stdout:true,
+            stderr:true
         }
     },
     watch: {
-      files: ['source/**/*.ts'],
-      tasks: ['tsc']
+      scripts: {
+        files: ['source/**/*.ts'],
+        tasks: ['exec']
+    },
     }
   });
-
-  grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks("grunt-tsc");
-
+grunt.loadNpmTasks('grunt-exec');
+grunt.loadNpmTasks('grunt-contrib-watch');
 };

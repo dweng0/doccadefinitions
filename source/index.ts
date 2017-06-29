@@ -1,2 +1,5 @@
 #!/usr/bin/env node
-console.log('Environment set up test!');
+import * as colors from 'colors';
+import {CommandLineInterface} from './input/cli';
+var cli = new CommandLineInterface();
+cli.start();

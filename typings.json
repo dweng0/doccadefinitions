@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "debug": "registry:npm/debug#2.0.0+20160723033700"
+  },
+  "globalDependencies": {
+    "colors": "registry:dt/colors#0.6.0-1+20160914114039",
+    "commander": "registry:dt/commander#2.3.0+20160317120654",
+    "node-dir": "registry:dt/node-dir#0.0.0+20160902120332",
+    "shelljs": "registry:dt/shelljs#0.0.0+20161003183410",
+    "underscore": "registry:dt/underscore#1.8.3+20160908111004"
+  }
+}

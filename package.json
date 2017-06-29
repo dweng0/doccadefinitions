@@ -11,7 +11,7 @@
     "url": "git+https://github.com/dweng0/doccadefinitions.git"
   },
   "bin": {
-    "dd": "dist/out-tsc/index.js"
+    "dd": "dist/source/index.js"
   },
   "keywords": [
     "compiler",
@@ -36,11 +36,12 @@
     "grunt": "^1.0.1",
     "grunt-cli": "^1.2.0",
     "grunt-contrib-watch": "^1.0.0",
-    "grunt-tsc": "^1.0.12",
+    "grunt-exec": "^2.0.0",
     "node-dir": "^0.1.17",
     "shelljs": "^0.7.8",
     "tslint": "^5.4.3",
     "typescript": "^2.4.1",
+    "typings": "^2.1.1",
     "underscore": "^1.8.3"
   }
 }
