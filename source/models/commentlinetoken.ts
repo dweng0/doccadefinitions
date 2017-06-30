@@ -102,7 +102,7 @@ export class CommentLineToken
                         char = input[++index];
 
                         // Then we'll iterate through each character until we reach another
-                        // double quote.
+                        // curly bracket
                         while (char !== '}') {
                               curlyValue += char;
                               char = input[++index];
