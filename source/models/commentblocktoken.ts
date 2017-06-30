@@ -18,6 +18,7 @@ export class CommentBlockToken
       this.cursor = this.getCodeBlockComment(input, this.cursor);
       this.codeLine = new Array();
       var clt = new CommentLineToken(input, this.cursor);
+      debugger;
       this.getCommentRepresentation(input, clt.cursor);
       this.commentLineToken = clt.tokens;
     }
@@ -43,14 +44,23 @@ export class CommentBlockToken
             let char = input[index];
             let WHITESPACE = /\s/;
             let NEWLINE = /\r|\n/;
-
+            let CARRIAGERETURN = /\r/;
+            let LINEFEED = /\n/;
+          
             //first find the new line
-            while(!NEWLINE.test(char))
+            while(!CARRIAGERETURN.test(char) || LINEFEED.test(char))
             {
                   char = input[++index];
             }
       
             char = input[++index];
+
+            //test for cr lf
+            if(NEWLINE.test(char))
+            {
+                  char = input[++index];
+            }
+            
             //now we want to read till we get to the next new line
             while(!NEWLINE.test(char))
             {
