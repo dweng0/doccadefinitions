@@ -1,18 +1,21 @@
 
 export enum JsDocBlogTag {
+    augment,    
     abstract, //This member must be implemented (or overridden) by the inheritor.
     access, //Specify the access level of this member (private, public, or protected).
     alias, //Treat a member as if it had a different name.
     augments, //Indicate that a symbol inherits from, ands adds to, a parent symbol.
     extends, //same as above
-    classTag, //This function is intended to be called with the "new" keyword.
+    classdesc, //used to describe a class
+    classtag, //This function is intended to be called with the "new" keyword.
     constructor, //same as above
     constructs, //This function member will be the constructor for the previous class.
     constant, //Document an object as a constant.
-    constTag,
+    consttag,
     defaultTag, //document the default value
     enum, //Document a collection of related properties.
     exports, //Identify the member that is exported by a JavaScript module.
+    lends,
     memberof, //This symbol belongs to a parent symbol.
     moduleTag,//Document a JavaScript module.
     name, //document the name of an object
@@ -34,6 +37,11 @@ export class AbstractSyntaxTree {
     public type: string;
     public file: string;
     public body: Array<CodeBlockSyntax>;
+
+    constructor()
+    {
+        this.body = new Array<CodeBlockSyntax>();
+    }
 }
 
 /**
@@ -43,6 +51,11 @@ export class CodeBlockSyntax {
     public description: string;
     public commentSymbols: Array<CommentSymbol>
     public inferedName: string;
+
+    constructor()
+    {
+        this.commentSymbols = new Array<CommentSymbol>();
+    }
 }
 
 /**
@@ -53,4 +66,14 @@ export class CommentSymbol {
     public optionalTypeBlock?: string;
     public optionalName?:string;
     public optionalComment?:string;
+    constructor()
+    {
+        
+    }
+
+    getBlockTag(tag: string): JsDocBlogTag
+    {
+        var tagAsEnum: JsDocBlogTag = (<any>JsDocBlogTag)[tag];
+        return tagAsEnum;
+    }
 }

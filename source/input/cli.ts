@@ -4,6 +4,7 @@ import * as colors from 'colors';
 import * as shell from 'shelljs';
 
 import { CommentParser } from '../core/commentparser';
+import { AstBuilder } from '../core/astbuilder';
 
 import {Main} from '../input/controller';
 import {MessageLevel} from '../models/parcel';
@@ -84,16 +85,14 @@ export class CommandLineInterface {
       parseFiles()
       {
             this.handleResponse(new Parcel("Performing Lexical Analysis...", MessageLevel.debug));
-
-            _.each(this.core.eligibleFiles, function(file){
-                  var parse = new CommentParser(file);
-                  
+            var self = this;
+            var lexicalParser = new CommentParser(this.core.eligibleFiles, function(){
+                  self.core.tokens = lexicalParser.getResults();
+                  debugger;
+                  self.handleResponse(new Parcel("Performing Syntactic Analysis...", MessageLevel.debug));
+                  var astBuilder = new AstBuilder(self.core.tokens);
             });
-            
-            //some time later...
-
-
-            this.handleResponse(new Parcel("Performing Syntactic Analysis...", MessageLevel.debug));
+          
       }
 
       performChangeDirCommand(path, command)

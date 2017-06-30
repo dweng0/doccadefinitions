@@ -5,7 +5,6 @@ export class CommentBlockToken
     commentLineToken:Array<Token>;
     cursor: number;
     comment: string;
-    
     /**
      * On construction the comment block takes the input and index and starts building up the comment block
      * @param input 
@@ -13,6 +12,7 @@ export class CommentBlockToken
      */
     constructor(input: string, index: number)
     {
+    
       //at this point, we know we are at '/**', so we skip until we get to a new commentLine      
       this.cursor = this.getNewLine(input, index);
       this.cursor = this.getCodeBlockComment(input, this.cursor);

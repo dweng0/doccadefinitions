@@ -1,6 +1,7 @@
 //for performing cli operations
 import * as fs from 'fs';
 import * as colors from 'colors';
+import * as _ from 'underscore';
 
 // for providing textual feedback to user...
 import { MessageLevel } from '../models/parcel';
@@ -9,6 +10,7 @@ import { Parcel } from '../models/parcel';
 //to strongly typing my classes
 import { ClassDeclaration } from '../models/classdeclaration';
 import { CommentBlockToken } from '../models/commentblocktoken'; 
+import { ClassDescriptionToken } from '../models/classdescriptionfile'; 
 
 //for string positioning
 import { Navigator } from '../models/navigator';
@@ -16,29 +18,42 @@ import { Navigator } from '../models/navigator';
 export class CommentParser {
       rawFile: string;
       verbose: Array<Parcel>;
-      commentBlocks: Array<CommentBlockToken>
+      filedescriptionTokens: Array<ClassDescriptionToken>
       tokenizedFile: any;
-      constructor(file: string) 
+      constructor(files: Array<string>, callback: () => any) 
       {
-            this.commentBlocks = new Array<CommentBlockToken>();
+            this.filedescriptionTokens = new Array<ClassDescriptionToken>();
             this.verbose = new Array<Parcel>();
             var self = this;
-            fs.readFile(file, 'utf8', function(err, data){
-                  if(err)
-                  {
-                        throw new Error(err.message);
-                  }
-                  self.tokenize(data);
-                  console.log(colors.green("Parsed "+ self.commentBlocks.length+ " comment blocks"));
-                  debugger;
+            
+            _.each(files, function(file){
+                  console.log(colors.green("Parsing " + file));
+                  fs.readFile(file, 'utf8', function(err, data){
+                        if(err)
+                        {
+                              throw new Error(err.message);
+                        }
+
+                        self.tokenize(file, data);
+
+                        console.log(colors.green("Parsed "+ self.filedescriptionTokens.length+ " files"));
+                        callback();
+                  })
             })
       }
 
-      tokenize(input)
+      getResults(): Array<ClassDescriptionToken>
+      {
+            return this.filedescriptionTokens;
+      }
+
+      tokenize(file, input)
       {
             let cursorIndex = 0;
             var char = input[cursorIndex];
-            var commentBlockTokens = new Array<CommentBlockToken>();
+            var cdt = new ClassDescriptionToken();
+                  cdt.file = file;
+                  cdt.blockTokens = new Array<CommentBlockToken>();
             
             //the first thing we want to do is find the comment opening block, otherwise we continue
             while(cursorIndex < input.length){
@@ -51,11 +66,12 @@ export class CommentParser {
                         //create a comment block token
                         var cbt = new CommentBlockToken(input, cursorIndex);
                         cursorIndex = cbt.getNewCursorPosition();
-                        this.commentBlocks.push(cbt);
+                        cdt.blockTokens.push(cbt);
                         continue;
                   }
                   char = input[++cursorIndex];
             }
+            this.filedescriptionTokens.push(cdt)
       }
 
       /**

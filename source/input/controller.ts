@@ -11,6 +11,8 @@ import * as program from 'commander'
 import * as colors from 'colors';
 import * as shell from 'shelljs';
 
+import { ClassDescriptionToken } from '../models/classdescriptionfile'; 
+
 export class Main { 
     version: "1.0.0";    
     readDir: string;
@@ -18,6 +20,7 @@ export class Main {
     isVerbose:boolean = true;
     language:string = 'jsdoc';
     allowedLanguages:Array<string>;
+    tokens: Array<ClassDescriptionToken>;
 
     /**
      * Stores list of eligible files to be compiled

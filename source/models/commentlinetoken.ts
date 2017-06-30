@@ -74,7 +74,6 @@ export class CommentLineToken
             }
 
             this.cursor = index++;
-            console.log('doc declaration value is', value);
             return value;
       }
 
