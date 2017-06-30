@@ -3,7 +3,7 @@ import * as program from 'commander';
 import * as colors from 'colors';
 import * as shell from 'shelljs';
 
-import { CodeParser } from '../core/parser';
+import { CommentParser } from '../core/commentparser';
 
 import {Main} from '../input/controller';
 import {MessageLevel} from '../models/parcel';
@@ -86,8 +86,7 @@ export class CommandLineInterface {
             this.handleResponse(new Parcel("Performing Lexical Analysis...", MessageLevel.debug));
 
             _.each(this.core.eligibleFiles, function(file){
-                  debugger;
-                  var parse = new CodeParser(file);
+                  var parse = new CommentParser(file);
                   
             });
             

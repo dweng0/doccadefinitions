@@ -8,7 +8,7 @@
             "program": "${workspaceRoot}\\dist\\source\\index.js",
             "stopOnEntry": false,
             "args": ["compile"],
-            "cwd": "${workspaceRoot}",
+            "cwd": "D:\\commenttest",
             "preLaunchTask": null,
             "runtimeExecutable": null,
             "runtimeArgs": [

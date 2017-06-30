@@ -20,8 +20,6 @@ export class CodeParser {
             this.verbose = new Array<Parcel>();
             var fileAsString = shell.tail(file).stdout;
             this.tokenizedFile = this.tokenize(fileAsString);
-            
-            console.log(this.tokenizedFile);
       }
 
       tokenize(input) {
@@ -158,7 +156,6 @@ export class CodeParser {
                   current++;
                   
             }
-            debugger;
             // Then at the end of our `tokenizer` we simply return the tokens array.
             return commentBlockTokens;
       }
