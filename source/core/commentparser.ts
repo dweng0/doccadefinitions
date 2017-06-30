@@ -1,5 +1,6 @@
 //for performing cli operations
 import * as fs from 'fs';
+import * as path from 'path';
 import * as colors from 'colors';
 import * as _ from 'underscore';
 
@@ -34,7 +35,8 @@ export class CommentParser {
                               throw new Error(err.message);
                         }
 
-                        self.tokenize(file, data);
+                        var fileName = path.basename(file);
+                        self.tokenize(fileName, data);
 
                         console.log(colors.green("Parsed "+ self.filedescriptionTokens.length+ " files"));
                         callback();

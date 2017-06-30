@@ -11,13 +11,14 @@ export class CommentLineToken
 
       getCommentLines(input: string, index: number)
       {
-            let char = input[index];            
+            let char = input[index];
+            let token;
             this.cursor = this.getCommentLine(input, index);
             while(!this.isClosingComment(input, this.cursor))
             {
                   if(char === "*")
                   {
-                        var token = this.buildTokenFromLine(input, this.cursor);
+                        token = this.buildTokenFromLine(input, this.cursor);
                         this.tokens.push(token);
                         char = input[this.cursor];
                   }
@@ -26,8 +27,8 @@ export class CommentLineToken
                         char = input[++this.cursor];
                   }
             }
+            this.cursor++;
       }
-      
 
       buildTokenFromLine(input: string, index: number): Token
       {

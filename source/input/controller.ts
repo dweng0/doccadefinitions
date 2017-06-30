@@ -21,7 +21,7 @@ export class Main {
     language:string = 'jsdoc';
     allowedLanguages:Array<string>;
     tokens: Array<ClassDescriptionToken>;
-
+    syntaxTree: AbstractSyntaxTree;
     /**
      * Stores list of eligible files to be compiled
      */

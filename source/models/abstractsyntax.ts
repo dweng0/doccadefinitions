@@ -50,12 +50,17 @@ export class AbstractSyntaxTree {
 export class CodeBlockSyntax {
     public description: string;
     public commentSymbols: Array<CommentSymbol>
-    public inferedName: string;
-
+    public inferedName: string; 
+    public codeLineSyntax: any;
     constructor()
     {
         this.commentSymbols = new Array<CommentSymbol>();
     }
+}
+
+export class CodeLineSyntax {
+    public name: string;
+    public value: string;
 }
 
 /**
@@ -66,6 +71,7 @@ export class CommentSymbol {
     public optionalTypeBlock?: string;
     public optionalName?:string;
     public optionalComment?:string;
+    
     constructor()
     {
         

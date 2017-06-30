@@ -4,7 +4,7 @@ import * as colors from 'colors';
 import { CommentBlockToken } from '../models/commentblocktoken'; 
 
 import { ClassDescriptionToken } from '../models/classdescriptionfile'; 
-import { AbstractSyntaxTree, CodeBlockSyntax, CommentSymbol } from '../models/abstractsyntax'; 
+import { AbstractSyntaxTree, CodeBlockSyntax, CommentSymbol, CodeLineSyntax } from '../models/abstractsyntax'; 
 
 export class AstBuilder {
       syntaxTree: AbstractSyntaxTree;
@@ -24,7 +24,13 @@ export class AstBuilder {
                   this.syntaxTree.body.push(ast);
             }, this);
 
-            console.log("AST", this.syntaxTree);
+            console.log("AST");
+            console.log(JSON.stringify(this.syntaxTree));
+      }
+
+      getSyntaxTree()
+      {
+            return this.syntaxTree;
       }
 
       buildBody(token: CommentBlockToken): CodeBlockSyntax
@@ -32,7 +38,8 @@ export class AstBuilder {
             var cbs = new CodeBlockSyntax();
             cbs.description = (token.comment) ? token.comment : "No Comment";
             cbs.inferedName = "todo";
-            
+            cbs.codeLineSyntax = token.codeLine;
+            debugger;
             _.each(token.commentLineToken, function(lineToken){
                   var cs = new CommentSymbol();
                   cs.blockTag = cs.getBlockTag(lineToken.atValue);

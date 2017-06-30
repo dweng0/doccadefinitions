@@ -45,7 +45,7 @@ export class CommandLineInterface {
                         self.parseFiles();
 
                         self.handleResponse(new Parcel("Performing Transformation...", MessageLevel.success))
-                        self.transformAST();
+                       // self.transformAST();
 
                         self.handleResponse(new Parcel("Generating Code...", MessageLevel.success));
                         self.generateCodeFromAST();
@@ -77,20 +77,30 @@ export class CommandLineInterface {
             
       }
 
-      transformAST()
+      /**
+       * Transform syntax tree into a more legible syntax tree
+       * @param syntaxTree 
+       */
+      transformAST(syntaxTree)
       {
             
       }
 
+      /**
+       * Take all files, parses them into tokens
+       */
       parseFiles()
       {
             this.handleResponse(new Parcel("Performing Lexical Analysis...", MessageLevel.debug));
             var self = this;
             var lexicalParser = new CommentParser(this.core.eligibleFiles, function(){
                   self.core.tokens = lexicalParser.getResults();
-                  debugger;
+
                   self.handleResponse(new Parcel("Performing Syntactic Analysis...", MessageLevel.debug));
                   var astBuilder = new AstBuilder(self.core.tokens);
+                  self.core.syntaxTree = astBuilder.getSyntaxTree();
+
+                  self.transformAST(self.core.syntaxTree);
             });
           
       }
