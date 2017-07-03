@@ -1,3 +1,4 @@
+import * as _ from 'underscore';
 import { CommentLineToken } from './commentlinetoken';
 import { Token } from './token';
 export class CommentBlockToken
@@ -73,13 +74,23 @@ export class CommentBlockToken
                   char = input[index];
 
                   //test for opening comment...
+                  
                   if(this.isOpeningComment(input, index))
                   {
+                        var lastCodeValue = _.last(this.codeLine);
                         //create a comment block token
-                        var cbt = new CommentBlockToken(input, index);
-                        index = cbt.getNewCursorPosition();
-                        this.childBlockTokens.push(cbt);
-                        continue;
+                        if(lastCodeValue.value === "{")
+                        {
+                              var cbt = new CommentBlockToken(input, index);
+                              index = cbt.getNewCursorPosition();
+                              this.childBlockTokens.push(cbt);
+                              continue;
+                        }
+                        else
+                        {
+                              index++;
+                        }
+                     
                   }
 
                   if(char === "{")
