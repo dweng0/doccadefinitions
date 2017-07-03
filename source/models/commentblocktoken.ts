@@ -22,8 +22,7 @@ export class CommentBlockToken
       this.childBlockTokens = new Array<CommentBlockToken>();
       var clt = new CommentLineToken(input, this.cursor);
       this.getCommentRepresentation(input, clt.cursor);
-      this.commentLineToken = clt.tokens;
-      debugger;
+      this.commentLineToken = clt.tokens;      
     }
 
     /**
@@ -42,6 +41,11 @@ export class CommentBlockToken
             return index;
     }
 
+    /**
+     * Gets the code that this comment represents
+     * @param input 
+     * @param index 
+     */
       getCommentRepresentation(input: string, index: number):void
       {
             let char = input[index];
@@ -66,6 +70,10 @@ export class CommentBlockToken
             //now we want to read till we get to a closing block statement or there's nothing left in the file to read
             while(char !== "}")
             {
+                  if(index == 460)
+                  {
+                        debugger;
+                  }
                   if(input.length <= index)
                   {
                         break;
@@ -88,7 +96,7 @@ export class CommentBlockToken
                         }
                         else
                         {
-                              index++;
+                              break;
                         }
                      
                   }
@@ -203,9 +211,32 @@ export class CommentBlockToken
                   }
                   index++;
             }
-            //got this far, found a closer
-            this.codeLine.push({type: 'fnBody', value: "}"});
+            debugger;
+           
+           //this is a bit hacky, but basically we can sometimes end up out here without finding the closing bracket. 
+           //So something somewhere is incrementing more then once... When i find that, we don't have to do this.
+           var openingbracket = false;
+           var closingBracket = false;
 
+           _.each(this.codeLine, function(codeLine){
+                 if(codeLine.value ==="{")
+                 {
+                       openingbracket = true;
+                 }
+
+                 if(codeLine.value === "}")
+                 {
+                       closingBracket = true;
+                 }
+           }, this);
+
+           if(openingbracket && !closingBracket)
+           {
+                  this.codeLine.push({
+                        type:"fnBody",
+                        value:"}"
+                  });
+           }
             //finally, set the index
             this.cursor = index++;
       }
