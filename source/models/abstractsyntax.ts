@@ -45,17 +45,11 @@ export class AbstractSyntaxTree {
 }
 
 /**
- * Holds the code block syntacs
+ * Holds the code block syntax
  */
 export class CodeBlockSyntax {
     public description: string;
-    public commentSymbols: Array<CommentSymbol>
-    public inferedName: string; 
-    public codeLineSyntax: any;
-    constructor()
-    {
-        this.commentSymbols = new Array<CommentSymbol>();
-    }
+    public token: Array<any> //could be an member, class, function anything   
 }
 
 export class CodeLineSyntax {
@@ -68,10 +62,7 @@ export class CodeLineSyntax {
  */
 export class CommentSymbol {
     public blockTag: JsDocBlogTag;
-    public optionalTypeBlock?: string;
-    public optionalName?:string;
-    public optionalComment?:string;
-    
+      
     constructor()
     {
         

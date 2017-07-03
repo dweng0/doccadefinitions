@@ -6,6 +6,7 @@ export class CommentBlockToken
     cursor: number;
     comment: string;
     codeLine: Array<any>; //this is the codeline that sits directly below the comment block
+    childBlockTokens: Array<CommentBlockToken>;
     /**
      * On construction the comment block takes the input and index and starts building up the comment block
      * @param input 
@@ -17,10 +18,11 @@ export class CommentBlockToken
       this.cursor = this.getNewLine(input, index);
       this.cursor = this.getCodeBlockComment(input, this.cursor);
       this.codeLine = new Array();
+      this.childBlockTokens = new Array<CommentBlockToken>();
       var clt = new CommentLineToken(input, this.cursor);
-      debugger;
       this.getCommentRepresentation(input, clt.cursor);
       this.commentLineToken = clt.tokens;
+      debugger;
     }
 
     /**
@@ -60,11 +62,34 @@ export class CommentBlockToken
             {
                   char = input[++index];
             }
-            
-            //now we want to read till we get to the next new line
-            while(!NEWLINE.test(char))
+            //now we want to read till we get to a closing block statement or there's nothing left in the file to read
+            while(char !== "}")
             {
+                  if(input.length <= index)
+                  {
+                        break;
+                  }
+
                   char = input[index];
+
+                  //test for opening comment...
+                  if(this.isOpeningComment(input, index))
+                  {
+                        //create a comment block token
+                        var cbt = new CommentBlockToken(input, index);
+                        index = cbt.getNewCursorPosition();
+                        this.childBlockTokens.push(cbt);
+                        continue;
+                  }
+
+                  if(char === "{")
+                  {
+                        this.codeLine.push({
+                              type:"fnBody",
+                              value:"{"
+                        });
+                  }
+
                   // We check to see if we have an open parenthesis:
                   if (char === '(') {
 
@@ -142,13 +167,36 @@ export class CommentBlockToken
                         char = input[++index];
                         }
 
+                        switch (value) {
+                              case "function":
+                              {
+                                     this.codeLine.push({ type: 'functionDeclaration', value });
+                              }                                    
+                              break;
+                              case "var":
+                              {
+                                     this.codeLine.push({ type: 'variableDeclaration', value });
+                              }
+                              break;
+                        
+                              default:
+                              {
+                                    this.codeLine.push({ type: 'name', value });
+                                    break;
+                              }
+                        }
                         // And pushing that value as a token with the type `name` and continuing.
-                        this.codeLine.push({ type: 'name', value });
+                       
 
                         continue;
                   }
                   index++;
             }
+            //got this far, found a closer
+            this.codeLine.push({type: 'fnBody', value: "}"});
+
+            //finally, set the index
+            this.cursor = index++;
       }
 
     /**
@@ -220,7 +268,7 @@ export class CommentBlockToken
     }
 
      /**
-      * determines if opening comment is next
+      * determines if closing comment is next
       * @param character 
       * @param cursorIndex
       * @return boolean 
@@ -230,6 +278,20 @@ export class CommentBlockToken
             var star = character[cursorIndex] === '*';
             var slash = character[(cursorIndex + 1)] === '/';
             return (star && slash);
+      }
+
+       /**
+      * determines if opening comment is next
+      * @param character 
+      * @param cursorIndex
+      * @return boolean 
+      */
+      isOpeningComment(character: string, cursorIndex: number): boolean
+      {
+            var slash = character[cursorIndex] === '/';
+            var star = character[(cursorIndex + 1)] === '*';
+            var star1 = character[(cursorIndex + 2)] === '*';
+            return (slash && star && star1);
       }
 
 }

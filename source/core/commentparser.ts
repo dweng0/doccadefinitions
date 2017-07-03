@@ -56,7 +56,6 @@ export class CommentParser {
             var cdt = new ClassDescriptionToken();
                   cdt.file = file;
                   cdt.blockTokens = new Array<CommentBlockToken>();
-            
             //the first thing we want to do is find the comment opening block, otherwise we continue
             while(cursorIndex < input.length){
 
@@ -64,12 +63,11 @@ export class CommentParser {
                   if(this.isOpeningComment(input, cursorIndex))
                   {
                         this.verbose.push(new Parcel("opening comment found", MessageLevel.debug));
-
                         //create a comment block token
                         var cbt = new CommentBlockToken(input, cursorIndex);
                         cursorIndex = cbt.getNewCursorPosition();
                         cdt.blockTokens.push(cbt);
-                        continue;
+                        continue
                   }
                   char = input[++cursorIndex];
             }
