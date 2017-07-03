@@ -1,5 +1,5 @@
 # doccadefinitions
-Take comments, make definitions
+For more information, take a look at the WIKI page
 
 # to run
 
