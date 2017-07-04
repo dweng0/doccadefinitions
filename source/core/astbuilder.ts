@@ -5,7 +5,7 @@ import { Namespace } from '../models/namespace';
 import { ClassDecorator } from '../models/classdecorator'; 
 import { TypeDecorator } from '../models/typedecorator'; 
 import { FuncitonDecorator } from '../models/functiondecorator'; 
-
+import { Crawler } from './crawlers/crawler';
 import { CommentBlockToken } from '../models/commentblocktoken'; 
 
 import { ClassDescriptionToken } from '../models/classdescriptionfile'; 
@@ -27,21 +27,16 @@ export class AstBuilder {
        */
       constructor(tokens: Array<ClassDescriptionToken>)
       {
-            this.tokens = tokens;
-            this.syntaxTree = this.builtTopLevelTree();        
-            
-            _.each(tokens, function(token){
+            var baseAst = this.buildTopLevelTree();
+
+            tokens.forEach(function(token){
                   var ast = new AbstractSyntaxTree();
                   ast.file = token.file;
                   ast.type = "todo";
-                  _.each(token.blockTokens, function(blockToken){
-                        ast.body.push(this.analyzeTokens(blockToken)); 
-                  }, this)
-                  this.syntaxTree.body.push(ast);
-            }, this);
-
-            console.log("AST");
-            console.log(JSON.stringify(this.syntaxTree));
+                  token.blockTokens.forEach(function(block){
+                        ast.body.push(this.analyzeTokens(block));
+                  },this);
+            },this);
       }
 
       getSyntaxTree()
@@ -55,6 +50,10 @@ export class AstBuilder {
        */
       analyzeTokens(token: CommentBlockToken): CodeBlockSyntax
       {
+            //we need to get the ba
+            var declarationName = this.getNameFromCode(token.codeLine);
+      
+            //analyze comments
             var cbs = new CodeBlockSyntax();
             cbs.description = (token.comment) ? token.comment : "No Comment";
             _.each(token.commentLineToken, _.bind(this.analyzeToken, this, token.codeLine));
@@ -68,11 +67,38 @@ export class AstBuilder {
        */
       analyzeToken(codeLine: Array<any>, lineToken: Token, )
       {
+
             var cs = new CommentSymbol();
 
             //check the block blockTag
             var blockTag = cs.getBlockTag(lineToken.atValue);
             var branchForTag = this.buildBranchForTag(blockTag, lineToken, codeLine);
+      }
+
+      getParametersFromCode(codeTokens): Array<any>
+      {
+            var openIndex;
+            var closeIndex;
+            var discoveredParameters = [];
+
+            codeTokens.forEach(function(token, index){
+                  if(token.type === "paren" && token.value === "(")
+                  {
+                        openIndex = index;
+                  }
+                  if(token.type === "paren" && token.value === ")")
+                  {
+                        closeIndex = index;
+                  }
+            })
+
+            while(openIndex < closeIndex)
+            {
+                  discoveredParameters.push(codeTokens[openIndex]);
+                  openIndex++;
+            }
+
+            return discoveredParameters;
       }
 
       /**
@@ -81,28 +107,53 @@ export class AstBuilder {
        */
       getNameFromCode(codeTokens): string
       {
-            var name = '';
-            var index = codeTokens.length;
-            var token = codeTokens[index].type;
+            var openIndex = 0;
+            var index = 0;
+            var closeIndex;
+            var names = [];
 
-            while(token.type !== "paren")
+            for(var i = 0; i < codeTokens.length; i++)
             {
-                  if(token.type === "name")
+                  var token = codeTokens[i];
+                  if(token.type === "paren" && token.value === "(")
                   {
-                        if(token.value.toLowerCase() !=="function" || token.value.toLowerCase() !=="var")
-                        {
-                             name = name + token.value;
-                            
-                        }
+                        openIndex = i;
+                        break;
                   }
-                  else if(token.type === "number")
-                  {
-                        name = name + token.value;
-                  }
-                  index++;
             }
-          
-            return name;
+
+            var varIndex = 0;
+            //if no params were found, lets go by the var
+            if(openIndex === 0)
+            {
+                  while(index < codeTokens.length)
+                  {
+                        var token = codeTokens[varIndex];
+                        if(token.type === "variableDeclaration")
+                        {
+                              //get all names after this
+                              token = codeTokens[++varIndex];
+                              while(token.type === "number"  || token.type === "name")
+                              {
+                                    names.push(token.value);
+                                    token = codeTokens[++varIndex];
+                              }
+                              break;
+                        }
+                        varIndex++;
+                  }
+            }
+            while(index < openIndex)
+            {
+                  if(codeTokens[index].type === "name" || codeTokens[index].type === "number")
+                  {
+                        names.push(codeTokens[index]);
+                  }                  
+                  openIndex++;
+            }
+
+           
+            return names.join('.');
       }
 
       buildBranchForTag(blocktag: JsDocBlogTag, token: Token, codeLine: Array<any>):any
@@ -212,7 +263,7 @@ export class AstBuilder {
       * Builds the base AST from which all children AST's will derive
       * @returns AbstractSyntaxTree
       */
-      builtTopLevelTree(): AbstractSyntaxTree
+      buildTopLevelTree(): AbstractSyntaxTree
       {
             var ast = new AbstractSyntaxTree();
 

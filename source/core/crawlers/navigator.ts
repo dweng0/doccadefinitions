@@ -1,14 +1,18 @@
+import {Token} from '../../models/token';
+import { AbstractSyntaxTree, CodeBlockSyntax, CommentSymbol, CodeLineSyntax, JsDocBlogTag } from '../../models/abstractsyntax'; 
+
 export class Navigator {
-      name: string;
+     name: string;
+
      constructor(name: string)
      {
 
      }
-     enter(node: any, parent: any)
+     enter(tokens: Array<Token>, parent: any)
      {
-
+      
      }
-     exit(node: any, parent: any)
+     exit(tokens: Array<Token>, parent: any)
      {
 
      }

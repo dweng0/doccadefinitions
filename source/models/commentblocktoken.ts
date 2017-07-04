@@ -70,10 +70,6 @@ export class CommentBlockToken
             //now we want to read till we get to a closing block statement or there's nothing left in the file to read
             while(char !== "}")
             {
-                  if(index == 460)
-                  {
-                        debugger;
-                  }
                   if(input.length <= index)
                   {
                         break;
@@ -211,7 +207,6 @@ export class CommentBlockToken
                   }
                   index++;
             }
-            debugger;
            
            //this is a bit hacky, but basically we can sometimes end up out here without finding the closing bracket. 
            //So something somewhere is incrementing more then once... When i find that, we don't have to do this.
