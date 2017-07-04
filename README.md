@@ -1,5 +1,13 @@
 Welcome to the magical world of Docca Definitions(dd).
 
+## Project goal
+
+To create a transpiler that uses both JSDOC comments and code to create strongly typed typescript definitions of javascript files.
+
+## Contribute
+
+If you fancy contributing, there are a ton of things that still need doing. Take a look at the projects page to see what st
+
 ## What is it?
 
 DD is a project that is designed to make transpiling from javascript to typescript (as definitions) a doddle. ...Provided you have your comments in good order.
