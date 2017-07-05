@@ -4,6 +4,8 @@
 # Docca Definitions
 >Definately Documented, Definately Typed.
 
+[Interested in Contributing?](https://github.com/dweng0/doccadefinitions/blob/master/CONTRIBUTING.md)
+
 DD is a project that is designed to make transpiling from javascript to typescript (as definitions) a doddle. ...Provided you have your comments in good order.
 
 ## Project goal
