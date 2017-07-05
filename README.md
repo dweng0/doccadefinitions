@@ -1,3 +1,5 @@
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
+
 ![Docca Definitions](./logo.png)
 # Docca Definitions
 >Definately Documented, Definately Typed.
