@@ -42,12 +42,12 @@ Features being tested, meaning that not only is it being tested but its being wo
 Issues should be raised using the issues functionality provided by GITHUB. if it is feature specific be sure to state the featureit relates to.
 
 ### You've pulled
-The README contains useful information on how to get up and running with a dev environment.
+The README contains useful information on how to get up and running with a dev environment, but if you have any issues, or feel it can be made clearer. let me know, or even more awesome - you can have a pop at updating it.
 
 ### I've commitment issues...
-Some rules when committing your changes.
+In order to maintain... Order... and to keep the experience lovely for everyone, there are three ground rules:
 
-- Make sure it compiles.
-- Create an issue and link it to the feature for any major development. It can be discussed and scoped.
+- Make sure it compiles. (please).
+- [If you want to add funcitonality] Create an issue and link it to the feature for any major development. It can be discussed and scoped.
 - Please be nice to everyone else :)
 
