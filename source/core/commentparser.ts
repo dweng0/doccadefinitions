@@ -9,8 +9,7 @@ import { MessageLevel } from '../models/parcel';
 import { Parcel } from '../models/parcel';
 
 //to strongly typing my classes
-import { ClassDeclaration } from '../models/classdeclaration';
-import { CommentBlockToken } from '../models/commentblocktoken'; 
+import { CommentBlockReader } from '../core/commentblockreader'; 
 import { ClassDescriptionToken } from '../models/classdescriptionfile'; 
 
 //for string positioning
@@ -55,7 +54,7 @@ export class CommentParser {
             var char = input[cursorIndex];
             var cdt = new ClassDescriptionToken();
                   cdt.file = file;
-                  cdt.blockTokens = new Array<CommentBlockToken>();
+                  cdt.blockTokens = new Array<CommentBlockReader>();
             //the first thing we want to do is find the comment opening block, otherwise we continue
             while(cursorIndex < input.length){
 
@@ -64,7 +63,7 @@ export class CommentParser {
                   {
                         this.verbose.push(new Parcel("opening comment found", MessageLevel.debug));
                         //create a comment block token
-                        var cbt = new CommentBlockToken(input, cursorIndex);
+                        var cbt = new CommentBlockReader(input, cursorIndex);
                         cursorIndex = cbt.getNewCursorPosition();
                         cdt.blockTokens.push(cbt);
                         continue

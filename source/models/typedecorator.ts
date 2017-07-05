@@ -1,8 +1,8 @@
 
 export enum SimpleType {
-    stringType, //we couldn't continue and thus we stopped
-    numberType, //we had an error we could handle, so ignored it.
-    boolType,//we had an error worth warning the user regardless of verboseness
+    stringType, 
+    numberType,
+    boolType,
     objectType,
     void
 }

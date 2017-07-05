@@ -6,7 +6,7 @@ import { ClassDecorator } from '../models/classdecorator';
 import { TypeDecorator } from '../models/typedecorator'; 
 import { FuncitonDecorator } from '../models/functiondecorator'; 
 import { Crawler } from './crawlers/crawler';
-import { CommentBlockToken } from '../models/commentblocktoken'; 
+import { CommentBlockReader } from '../core/commentblockreader'; 
 
 import { ClassDescriptionToken } from '../models/classdescriptionfile'; 
 import {Token} from '../models/token';
@@ -46,9 +46,9 @@ export class AstBuilder {
 
       /**
        * Takes the tokens and turns them into an AST component
-       * @param token {CommentBlockToken} - an individual comment block token
+       * @param token {CommentBlockReader} - an individual comment block token
        */
-      analyzeTokens(token: CommentBlockToken): CodeBlockSyntax
+      analyzeTokens(token: CommentBlockReader): CodeBlockSyntax
       {
             //we need to get the ba
             var declarationName = this.getNameFromCode(token.codeLine);
@@ -56,7 +56,7 @@ export class AstBuilder {
             //analyze comments
             var cbs = new CodeBlockSyntax();
             cbs.description = (token.comment) ? token.comment : "No Comment";
-            _.each(token.commentLineToken, _.bind(this.analyzeToken, this, token.codeLine));
+            _.each(token.CommentLineReader, _.bind(this.analyzeToken, this, token.codeLine));
             return cbs;
       }
 

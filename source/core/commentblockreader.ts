@@ -1,13 +1,14 @@
 import * as _ from 'underscore';
-import { CommentLineToken } from './commentlinetoken';
-import { Token } from './token';
-export class CommentBlockToken
+import { CommentLineReader } from './commentlinereader';
+import { Token } from '../models/token';
+
+export class CommentBlockReader
 {
-    commentLineToken:Array<Token>;
+    CommentLineReader:Array<Token>;
     cursor: number;
     comment: string;
     codeLine: Array<any>; //this is the codeline that sits directly below the comment block
-    childBlockTokens: Array<CommentBlockToken>;
+    childBlockTokens: Array<CommentBlockReader>;
     /**
      * On construction the comment block takes the input and index and starts building up the comment block
      * @param input 
@@ -19,10 +20,10 @@ export class CommentBlockToken
       this.cursor = this.getNewLine(input, index);
       this.cursor = this.getCodeBlockComment(input, this.cursor);
       this.codeLine = new Array();
-      this.childBlockTokens = new Array<CommentBlockToken>();
-      var clt = new CommentLineToken(input, this.cursor);
+      this.childBlockTokens = new Array<CommentBlockReader>();
+      var clt = new CommentLineReader(input, this.cursor);
       this.getCommentRepresentation(input, clt.cursor);
-      this.commentLineToken = clt.tokens;      
+      this.CommentLineReader = clt.tokens;      
     }
 
     /**
@@ -85,7 +86,7 @@ export class CommentBlockToken
                         //create a comment block token
                         if(lastCodeValue.value === "{")
                         {
-                              var cbt = new CommentBlockToken(input, index);
+                              var cbt = new CommentBlockReader(input, index);
                               index = cbt.getNewCursorPosition();
                               this.childBlockTokens.push(cbt);
                               continue;

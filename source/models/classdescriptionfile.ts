@@ -1,5 +1,5 @@
-import { CommentBlockToken } from '../models/commentblocktoken'; 
+import { CommentBlockReader } from '../core/commentblockreader'; 
 export class ClassDescriptionToken {
     public file: string;
-    public blockTokens: Array<CommentBlockToken>;
+    public blockTokens: Array<CommentBlockReader>;
 }

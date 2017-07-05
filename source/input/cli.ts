@@ -1,7 +1,6 @@
 import * as _ from 'underscore';
 import * as program from 'commander';
 import * as colors from 'colors';
-import * as shell from 'shelljs';
 
 import { CommentParser } from '../core/commentparser';
 import { AstBuilder } from '../core/astbuilder';
@@ -9,7 +8,11 @@ import { AstBuilder } from '../core/astbuilder';
 import {Main} from '../input/controller';
 import {MessageLevel} from '../models/parcel';
 import {Parcel} from '../models/parcel';
+import { ClassDescriptionToken } from '../models/classdescriptionfile'; 
 
+/**
+ * Handles command line interface controls
+ */
 export class CommandLineInterface {
       isVerbose:true;
       core: Main
@@ -42,7 +45,16 @@ export class CommandLineInterface {
                         self.getFiles();
 
                         self.handleResponse(new Parcel("Generating Abstract Syntax Tree...", MessageLevel.success))
-                        self.parseFiles();
+                        self.parseFiles(function(describer: Array<ClassDescriptionToken>){
+                              self.handleResponse(new Parcel("Performing Transformation..", MessageLevel.success));
+                              self.core.tokens = describer;
+                              self.handleResponse(new Parcel("Performing Syntactic Analysis...", MessageLevel.debug));
+
+                              var astBuilder = new AstBuilder(self.core.tokens);
+                              self.core.syntaxTree = astBuilder.getSyntaxTree();
+
+                              self.transformAST(self.core.syntaxTree);
+                        });
 
                         self.handleResponse(new Parcel("Performing Transformation...", MessageLevel.success))
                        // self.transformAST();
@@ -89,18 +101,12 @@ export class CommandLineInterface {
       /**
        * Take all files, parses them into tokens
        */
-      parseFiles()
+      parseFiles(callback: (results: any) => any)
       {
             this.handleResponse(new Parcel("Performing Lexical Analysis...", MessageLevel.debug));
             var self = this;
             var lexicalParser = new CommentParser(this.core.eligibleFiles, function(){
-                  self.core.tokens = lexicalParser.getResults();
-
-                  self.handleResponse(new Parcel("Performing Syntactic Analysis...", MessageLevel.debug));
-                  var astBuilder = new AstBuilder(self.core.tokens);
-                  self.core.syntaxTree = astBuilder.getSyntaxTree();
-
-                  self.transformAST(self.core.syntaxTree);
+                  callback(lexicalParser.getResults());
             });
           
       }

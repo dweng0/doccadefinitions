@@ -11,7 +11,7 @@
     "url": "git+https://github.com/dweng0/doccadefinitions.git"
   },
   "bin": {
-    "dd": "source/index.js"
+    "dd": "dist/index.js"
   },
   "keywords": [
     "compiler",

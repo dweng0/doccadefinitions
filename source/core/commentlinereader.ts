@@ -1,5 +1,5 @@
-import {Token} from './token';
-export class CommentLineToken
+import {Token} from '../models/token';
+export class CommentLineReader
 {
       tokens: Array<Token>;
       cursor: number;
