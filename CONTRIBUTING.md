@@ -11,7 +11,7 @@ Following these guidelines helps to communicate that you respect the time of the
 
 The projects section contains a general overview of components needed for this application to work. They may be in various stages of completeness, but the general rule is, if you are interested working on a certain feature area, or feel you can improve another feature area. convey this to me, we can get you on board and you can start weaving your magic.
 
-Features for the project can be in one of four stages:
+Features for the project can be in one of [four stages](https://github.com/dweng0/doccadefinitions/projects/1):
 
 ### TODO
 > A feature identified as something that is needed in order to complete the bigger picture.
