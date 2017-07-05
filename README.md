@@ -1,16 +1,11 @@
-Welcome to the magical world of Docca Definitions(dd).
+# Docca Definitions
+>Definately Documented, Definately Typed.
+
+DD is a project that is designed to make transpiling from javascript to typescript (as definitions) a doddle. ...Provided you have your comments in good order.
 
 ## Project goal
 
 To create a transpiler that uses both JSDOC comments and code to create strongly typed typescript definitions of javascript files.
-
-## Contribute
-
-If you fancy contributing, there are a ton of things that still need doing. Take a look at the projects page to see what st
-
-## What is it?
-
-DD is a project that is designed to make transpiling from javascript to typescript (as definitions) a doddle. ...Provided you have your comments in good order.
 
 ## How does it work?
 
@@ -29,7 +24,7 @@ take for example:
     var test = true;
     }
 
-DD will look at the comments and the first line and use the two corresponding bits of information to make definitions for your code as strongly typed as possible.
+DD will look at the comments and the corresponding code and use the two corresponding bits of information to make definitions for your code as strongly typed as possible.
 
 Using the above example. it will take the information for the function `book` and strongly type it into a typescript class called `Book` that takes a `title:string` and `author:string` in its constructor arguments.
 
@@ -44,3 +39,84 @@ There's a more indepth breakdown with some examples over at the [examples page](
 If the project interests you and you'd like to participate, there's still a fair old chunk [left to do](https://github.com/dweng0/doccadefinitions/projects/1)
 
 If there are any problems, comments or suggestions, feel free to drop me a message in the WIKI or elsewhere
+
+## Installing / Getting started
+
+install dependencies.
+Make sure you have typescript 2.4 or greater
+In the root dir type the following
+
+```npm link```
+
+This will set up the global command `dd`
+
+Take a look at the commands
+
+``` dd -help ```
+
+List the current working directory before running compile
+
+```shell
+dd list 
+```
+
+Happy with the files it found? Lets compile
+
+```shell
+dd compile 
+```
+## Developing
+
+### Contribute
+
+If you fancy contributing, there are a ton of things that still need doing. Take a look at the projects page to see what st
+
+### Built With
+Typescript
+Shelljs
+
+### Prerequisites
+If you want to automate typescript compile you'll need all the `grunt` dependencies
+And of course, you'll need to make sure you have typescript, it needs to be 2.4.1 or greater
+
+### Setting up Dev
+
+Here's a brief intro about what a developer must do in order to start developing
+the project further:
+
+```shell
+git clone https://github.com/dweng0/doccadefinitions.git
+cd {root}/
+npm install
+```
+
+If you don't have installed you will need to install it globally
+
+```shell
+npm install -g
+```
+
+Then take a look at the tasks in the projects and crack on!
+
+### Building
+
+The tsconfig sets up where typescript builds to. it is set to '{root}/dist'
+it's set to read from '{root}/source`
+
+```shell
+tsc
+```
+
+There's no special pre requirements, provided the root dist folder exists.
+
+## Tests
+
+No testing has been implemented yet.
+
+## Style guide
+
+Explain your code style and show how to check it.
+
+## Licensing
+
+GNU 3
