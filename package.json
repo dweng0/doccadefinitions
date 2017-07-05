@@ -1,6 +1,6 @@
 {
   "name": "doccadefinitions",
-  "version": "1.0.15",
+  "version": "1.0.16-v1.0.15-d.0",
   "description": "Take Docca comments, make Typescript definitions",
   "main": "index.js",
   "scripts": {
