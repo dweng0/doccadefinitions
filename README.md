@@ -1,12 +1,12 @@
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com) [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 
 ![Docca Definitions](./logo.png)
 # Docca Definitions
 >Definately Documented, Definately Typed.
 
-[Interested in Contributing?](https://github.com/dweng0/doccadefinitions/blob/master/CONTRIBUTING.md)
-
 DD is a project that is designed to make transpiling from javascript to typescript (as definitions) a doddle. ...Provided you have your comments in good order.
+
+This project is still in development. [Get involved!](https://github.com/dweng0/doccadefinitions/blob/master/CONTRIBUTING.md)
 
 ## Project goal
 
