@@ -42,6 +42,8 @@ If there are any problems, comments or suggestions, feel free to drop me a messa
 
 ## Installing / Getting started
 
+DD is still in development, thus features have not been implemented.
+
 install dependencies.
 Make sure you have typescript 2.4 or greater
 In the root dir type the following
