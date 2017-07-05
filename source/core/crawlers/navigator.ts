@@ -8,9 +8,9 @@ export class Navigator {
      {
 
      }
-     enter(tokens: Array<Token>, parent: any)
+     enter(tokens: Array<Token>, codeLine: Array<any>, parent: any)
      {
-      
+            //do the name building stuff here
      }
      exit(tokens: Array<Token>, parent: any)
      {

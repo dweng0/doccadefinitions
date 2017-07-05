@@ -72,7 +72,8 @@ export class AstBuilder {
 
             //check the block blockTag
             var blockTag = cs.getBlockTag(lineToken.atValue);
-            var branchForTag = this.buildBranchForTag(blockTag, lineToken, codeLine);
+           // var 
+            var branchForTag = this.getDefinitionAST(blockTag, lineToken, codeLine);
       }
 
       getParametersFromCode(codeTokens): Array<any>
@@ -156,7 +157,7 @@ export class AstBuilder {
             return names.join('.');
       }
 
-      buildBranchForTag(blocktag: JsDocBlogTag, token: Token, codeLine: Array<any>):any
+      getDefinitionAST(blocktag: JsDocBlogTag, token: Token, codeLine: Array<any>):any
       {
             var result;
             switch (blocktag) {
