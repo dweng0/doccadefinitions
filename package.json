@@ -1,6 +1,6 @@
 {
   "name": "doccadefinitions",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Take Docca comments, make Typescript definitions",
   "main": "index.js",
   "scripts": {
@@ -34,6 +34,7 @@
     "commander": "^2.10.0",
     "eslint": "^4.1.1",
     "grunt": "^1.0.1",
+    "grunt-bump": "^0.8.0",
     "grunt-cli": "^1.2.0",
     "grunt-contrib-watch": "^1.0.0",
     "grunt-exec": "^2.0.0",
