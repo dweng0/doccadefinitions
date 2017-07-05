@@ -1,3 +1,4 @@
+![Docca Definitions](./logo.png)
 # Docca Definitions
 >Definately Documented, Definately Typed.
 
