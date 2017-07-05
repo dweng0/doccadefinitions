@@ -7,7 +7,7 @@
             "request": "launch",
             "program": "${workspaceRoot}\\dist\\index.js",
             "stopOnEntry": false,
-            "args": ["compile"],
+            "args": ["compile", "-f", "C:\\Users\\Skippy\\Documents\\Development\\doccadefinitions\\tests"],
             "cwd": "${workspaceRoot}\\dist",
             "preLaunchTask": null,
             "runtimeExecutable": null,

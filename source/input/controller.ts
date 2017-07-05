@@ -100,8 +100,17 @@ export class Main {
         {        
            throw new Error("Could not find directory: "+ dir);
         }
-        var files = shell.ls(recursive, searchDir);
-        
+
+        var files;
+        if(recursive)
+        {
+            files = shell.ls(recursive, searchDir);
+        }
+        else
+        {
+            files = shell.ls(searchDir);
+        }
+              
         //Weed out folders, we just want files
         var fileIndex = files.length;
         while(fileIndex--)
@@ -131,7 +140,6 @@ export class Main {
 
     public loadFiles(isVerbose: boolean, isRecursive?: boolean, filePaths?: Array<string>, ) : Array<Parcel>
     {   
-        debugger;
         var parcels = new Array<Parcel>();
         var verbose = isVerbose || false;
         var resursive = isRecursive || false;
@@ -156,7 +164,6 @@ export class Main {
      */
     public readFileDir(dir: string, isRecursive: boolean, verbose:boolean):Array<Parcel>
     {
-        debugger;
         var transportData = new Array<Parcel>();
         
         this.eligibleFiles = this.getFiles(dir, isRecursive);

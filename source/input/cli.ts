@@ -42,8 +42,6 @@ export class CommandLineInterface {
                   .option('-r --recursive', 'Determines if one read files recursively')
                   .description('Set the output directory, this is where the compiler will put definition files')
                   .action(function(command){
-
-                        debugger;
                         //self.handleFlags(this.parent);
                         var responseText = (command.files) ? "Getting file: "+ command.files : "Getting files...";
                         self.handleResponse(new Parcel(responseText, MessageLevel.success));
@@ -51,12 +49,15 @@ export class CommandLineInterface {
                         self.getFiles(command.files, command.recursive);
 
                         self.handleResponse(new Parcel("Generating Abstract Syntax Tree...", MessageLevel.success))
-                        self.parseFiles(function(describer: Array<ClassDescriptionToken>){
+                        self.parseFiles(function(descriptions: Array<ClassDescriptionToken>){
+                          
                               self.handleResponse(new Parcel("Performing Transformation..", MessageLevel.success));
-                              self.core.tokens = describer;
+                              self.core.tokens = descriptions;
+                              
+                              debugger;
+                              var astBuilder = new AstBuilder(self.core.tokens);
                               self.handleResponse(new Parcel("Performing Syntactic Analysis...", MessageLevel.debug));
 
-                              var astBuilder = new AstBuilder(self.core.tokens);
                               self.core.syntaxTree = astBuilder.getSyntaxTree();
 
                               self.transformAST(self.core.syntaxTree);
@@ -69,14 +70,6 @@ export class CommandLineInterface {
                         self.generateCodeFromAST();
 
                   }); 
-
-            /*program
-                  .command('changedir')
-                  .description('Change the input/output directory')
-                  .action(_.bind(this.performChangeDirCommand, this))
-                  .option('-w, --outDir', '[path] --outDir changes output directory (default)')
-                  .option('-r, --inDir', '[path] --inDir changes input direactory')
-                  .option('-v, --verbose', 'be noisey');*/
 
             program
                   .command('list')
