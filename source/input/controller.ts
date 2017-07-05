@@ -90,27 +90,76 @@ export class Main {
      * I make sure the target directory exists
      * I get all eligble js files as file paths
      */
-    private getFiles(dir:string) : Array<string>
+    private getFiles(dir:string, isRecursive: boolean) : Array<string>
     {
+        var searchDir = (dir.split(".").length > 0) ? dir : dir+"/*.js";
+        var recursive = (isRecursive) ? "-R" : "";
+
         //check path to output to exists.. make if nots
         if (!shell.test('-e', dir))
         {        
-            shell.mkdir('-p', dir);
+           throw new Error("Could not find directory: "+ dir);
         }
-       
-        return shell.ls('-R', dir+'/*.js');  
+        var files = shell.ls(recursive, searchDir);
+        
+        //Weed out folders, we just want files
+        var fileIndex = files.length;
+        while(fileIndex--)
+        {
+            var file = files[fileIndex];
+            if(file.split('.').length < 2)
+            {
+                files.splice(fileIndex, 1);
+            }
+            else
+            {
+                //oddly, shelljs does not give back the absolute path, so we have to stick that back on 
+                if(dir.split(".").length > 0)
+                {
+                    files[fileIndex] = searchDir +'\\'+ file.replace("/","\\");
+                }
+                else
+                {
+                    files[fileIndex] = searchDir;
+                }
+            }
+        }
+      
+        return  files;
     }
 
+
+    public loadFiles(isVerbose: boolean, isRecursive?: boolean, filePaths?: Array<string>, ) : Array<Parcel>
+    {   
+        debugger;
+        var parcels = new Array<Parcel>();
+        var verbose = isVerbose || false;
+        var resursive = isRecursive || false;
+        if(filePaths)
+        {
+              filePaths.forEach(function(filePath){
+                var filePathParcels = this.readFileDir(filePath, isRecursive, isVerbose);
+                parcels = parcels.concat(filePathParcels);
+            },this);
+        }
+        else
+        {
+            parcels = this.readFileDir(this.readDir, isRecursive,  isVerbose);    
+        }
+
+        return parcels;
+    }
 
     /**
      * Purpose:
      * Load files into the eligibleFiles property
      */
-    public loadFiles(verbose?:boolean):Array<Parcel>
+    public readFileDir(dir: string, isRecursive: boolean, verbose:boolean):Array<Parcel>
     {
+        debugger;
         var transportData = new Array<Parcel>();
         
-        this.eligibleFiles = this.getFiles(this.readDir);
+        this.eligibleFiles = this.getFiles(dir, isRecursive);
 
         var filesNumbers = this.eligibleFiles.length;
 

@@ -38,11 +38,17 @@ export class CommandLineInterface {
                         
             program
                   .command('compile')
+                  .option('-f --files [filename]',  'Compile only a files specified (comma seperated), you can specify just a directory or a file')
+                  .option('-r --recursive', 'Determines if one read files recursively')
                   .description('Set the output directory, this is where the compiler will put definition files')
-                  .action(function(dir, commands){            
-                        self.handleFlags(this.parent);
-                        self.handleResponse(new Parcel("Getting files...", MessageLevel.success));
-                        self.getFiles();
+                  .action(function(command){
+
+                        debugger;
+                        //self.handleFlags(this.parent);
+                        var responseText = (command.files) ? "Getting file: "+ command.files : "Getting files...";
+                        self.handleResponse(new Parcel(responseText, MessageLevel.success));
+
+                        self.getFiles(command.files, command.recursive);
 
                         self.handleResponse(new Parcel("Generating Abstract Syntax Tree...", MessageLevel.success))
                         self.parseFiles(function(describer: Array<ClassDescriptionToken>){
@@ -152,48 +158,26 @@ export class CommandLineInterface {
 
       /**
        * Get files to be compiled
+       * @param files {string} - at this point its a comma seperated string because its just come from the cli
        * @param isVerbose 
        */
-      getFiles()
+      getFiles(files?: string, isRecursive?: boolean)
       {
             var results;
-                  results = this.core.loadFiles(this.isVerbose);
+
+            if(files)
+            {
+                  results = this.core.loadFiles(this.isVerbose, isRecursive, files.split(','));
+            }
+            else
+            {
+                  results = this.core.loadFiles(this.isVerbose, isRecursive);
+            }
 
             _.each(results, function(result, results){
                   this.handleResponse(result);
             }, this);
             
-      }
-
-      /**
-       * Handle flags set by the user
-       * @param commands 
-       */
-      handleFlags(commands:any)
-      {
-            var result;
-            if(commands.verbose)
-            {
-            this.isVerbose = true;
-            }
-
-            if(commands.lang)
-            {
-            result = this.core.setLanguage(commands.lang);
-            this.handleResponse(result);      
-            }
-
-            if(commands.chdir)
-            {
-            result = this.core.setReadDir(commands.chdir);
-            this.handleResponse(result);       
-            }
-
-            if(commands.choutput)
-            {
-            result = this.core.setWriteDir(commands.choutput);
-            this.handleResponse(result);
-            }    
       }
 
       /**
