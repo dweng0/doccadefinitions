@@ -92,7 +92,7 @@ cd {root}/
 npm install
 ```
 
-If you don't have installed you will need to install it globally
+If you don't have typescript installed you will need to install it globally
 
 ```shell
 npm install -g
@@ -114,10 +114,6 @@ There's no special pre requirements, provided the root dist folder exists.
 ## Tests
 
 No testing has been implemented yet.
-
-## Style guide
-
-Explain your code style and show how to check it.
 
 ## Licensing
 
