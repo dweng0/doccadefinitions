@@ -1,6 +1,6 @@
 # We = Power
 
->First time making a Pull Request? [find out just how easy it is!](http://makeapullrequest.com/).
+**Working on your first Pull Request?** You can learn how from this *free* series [How to Contribute to an Open Source Project on GitHub](https://egghead.io/series/how-to-contribute-to-an-open-source-project-on-github)
 
 First off, thank you for considering contributing to DD, it's always exciting collaborating with people to make awesome stuff.
 
