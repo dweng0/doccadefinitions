@@ -1,6 +1,6 @@
 {
   "name": "doccadefinitions",
-  "version": "1.0.1-alpha.36",
+  "version": "1.0.2-alpha.2",
   "description": "Take Docca comments, make Typescript definitions",
   "main": "index.js",
   "scripts": {
@@ -40,6 +40,7 @@
     "grunt-exec": "^2.0.0",
     "node-dir": "^0.1.17",
     "shelljs": "^0.7.8",
+    "ts-emitter": "^0.3.1",
     "tslint": "^5.4.3",
     "typescript": "^2.4.1",
     "typings": "^2.1.1",

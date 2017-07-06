@@ -5,11 +5,12 @@ import { Namespace } from '../models/namespace';
 import { ClassDecorator } from '../models/classdecorator'; 
 import { TypeDecorator } from '../models/typedecorator'; 
 import { FuncitonDecorator } from '../models/functiondecorator'; 
-import { Crawler } from './crawlers/crawler';
+import { Visitor } from './crawlers/visitor';
 import { CommentBlockReader } from '../core/commentblockreader'; 
 
 import { ClassDescriptionToken } from '../models/classdescriptionfile'; 
 import {Token} from '../models/token';
+import {fromPath} from 'ts-emitter';
 import { AbstractSyntaxTree, CodeBlockSyntax, CommentSymbol, CodeLineSyntax, JsDocBlogTag } from '../models/abstractsyntax'; 
 
 export class AstBuilder {
@@ -27,6 +28,10 @@ export class AstBuilder {
        */
       constructor(tokens: Array<ClassDescriptionToken>)
       {
+            debugger
+            const as = fromPath('C:\\Users\\Skippy\\Documents\\Development\\doccadefinitions\\source\\core\\astbuilder.ts');
+            console.log(as);
+
             var baseAst = this.buildTopLevelTree();
 
             tokens.forEach(function(token){
