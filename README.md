@@ -33,6 +33,8 @@ DD will look at the comments and the corresponding code and use the two correspo
 
 Using the above example. it will take the information for the function `book` and strongly type it into a typescript class called `Book` that takes a `title:string` and `author:string` in its constructor arguments.
 
+Note that AST that the typescript compiler uses to generate typescript files is still being baked into this project, so it currently **just builds an AST based on comments and code** this **will then be** transpiled into the typescript AST
+
 ## What if I code in an un conventional fashion?
 
 DD is pretty abstract, if you code using namespaces or plain old functions it wont care too much as long as the comments are there to give it a clue. 
