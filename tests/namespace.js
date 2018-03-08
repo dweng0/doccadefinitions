@@ -6,7 +6,7 @@
 
         /**
          * call foo, foo'
-         * @param {string} beef - a type of meet
+         * @param {string} beef - a type of meat
          * @param {boolean} test - determines if test or not
          * @returns {Backbone.Model} beefModel - a model, of the beef
          */

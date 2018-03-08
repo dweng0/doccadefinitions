@@ -50,15 +50,17 @@ export class CommandLineInterface {
 
                         self.handleResponse(new Parcel("Generating Abstract Syntax Tree...", MessageLevel.success))
                         self.parseFiles(function(descriptions: Array<ClassDescriptionToken>){
-                              console.log('descriptions found', descriptions);
-                        
+                              
+                              self.handleResponse(new Parcel("ASTs discovered...", MessageLevel.success));
                               descriptions.forEach((description) => {
                                     description.blockTokens.forEach((element) => {
-                                          console.log('lost in space...',element);
+                                          self.handleResponse(new Parcel(JSON.stringify(element, null, "\t"), MessageLevel.debug));
                                     });
                               })
-                              self.handleResponse(new Parcel("Performing Transformation..", MessageLevel.success));
-                              self.core.tokens = descriptions;
+                              self.handleResponse(new Parcel("At this point we have an ast built from the code, it now needs to be translated into the typescript AST so that the typescript compiler can compile it...", MessageLevel.success));
+                              self.handleResponse(new Parcel("The code line and the comment line can be matched up and used to create a new AST, this ast could then (in theory) be passed into the typescript compiler (making the tsc to all the hard work).", MessageLevel.success));
+                              return;
+                              /**self.core.tokens = descriptions;
                               
                               debugger;
                               var astBuilder = new AstBuilder(self.core.tokens);
@@ -66,7 +68,7 @@ export class CommandLineInterface {
 
                               self.core.syntaxTree = astBuilder.getSyntaxTree();
 
-                              self.transformAST(self.core.syntaxTree);
+                              self.transformAST(self.core.syntaxTree);*/
                         });
 
                         self.handleResponse(new Parcel("Performing Transformation...", MessageLevel.success))
