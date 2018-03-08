@@ -1,47 +1,46 @@
 import * as _ from 'underscore';
 import * as colors from 'colors';
 
-import { Namespace } from '../models/namespace'; 
-import { ClassDecorator } from '../models/classdecorator'; 
-import { TypeDecorator } from '../models/typedecorator'; 
-import { FuncitonDecorator } from '../models/functiondecorator'; 
+import { Namespace } from '../models/namespace';
+import { ClassDecorator } from '../models/classdecorator';
+import { TypeDecorator } from '../models/typedecorator';
+import { FuncitonDecorator } from '../models/functiondecorator';
 import { Visitor } from './crawlers/visitor';
-import { CommentBlockReader } from '../core/commentblockreader'; 
+import { CommentBlockReader } from '../core/commentblockreader';
 
-import { ClassDescriptionToken } from '../models/classdescriptionfile'; 
-import {Token} from '../models/token';
-import {fromPath} from 'ts-emitter';
-import { AbstractSyntaxTree, CodeBlockSyntax, CommentSymbol, CodeLineSyntax, JsDocBlogTag } from '../models/abstractsyntax'; 
+import { ClassDescriptionToken } from '../models/classdescriptionfile';
+import { Token } from '../models/token';
+import { fromPath } from 'ts-emitter';
+import { AbstractSyntaxTree, CodeBlockSyntax, CommentSymbol, CodeLineSyntax, JsDocBlogTag } from '../models/abstractsyntax';
 
 export class AstBuilder {
+      private nameSpaces: Array<Namespace> = new Array<Namespace>();
+
       syntaxTree: AbstractSyntaxTree;
       tokens: Array<ClassDescriptionToken>;
-      nameSpaces:Array<any>;
-      classes:Array<any>;
-      functions:Array<any>;
-      memberVariables:Array<any>;
-      enumVariables:Array<any>;
+      classes: Array<any>;
+      functions: Array<any>;
+      memberVariables: Array<any>;
+      enumVariables: Array<any>;
 
       /**
        * Given a set of tokens, create a syntaxTree for definition types
        * @param tokens {Object} 
        */
-      constructor(tokens: Array<ClassDescriptionToken>)
-      {
+      constructor(tokens: Array<ClassDescriptionToken>) {
             let baseAst = this.buildTopLevelTree();
 
-            tokens.forEach(function(token){
+            tokens.forEach(function (token) {
                   var ast = new AbstractSyntaxTree();
                   ast.file = token.file;
                   ast.type = "todo";
-                  token.blockTokens.forEach(function(block){
+                  token.blockTokens.forEach(function (block) {
                         ast.body.push(this.analyzeTokens(block));
-                  },this);
-            },this);
+                  }, this);
+            }, this);
       }
 
-      getSyntaxTree()
-      {
+      getSyntaxTree() {
             return this.syntaxTree;
       }
 
@@ -49,15 +48,16 @@ export class AstBuilder {
        * Takes the tokens and turns them into an AST component
        * @param token {CommentBlockReader} - an individual comment block token
        */
-      analyzeTokens(token: CommentBlockReader): CodeBlockSyntax
-      {
+      analyzeTokens(token: CommentBlockReader): CodeBlockSyntax {
             //we need to get the ba
-            var declarationName = this.getNameFromCode(token.codeLine);
-      
+            let declarationName = this.getNameFromCode(token.codeLine);
+            console.log('dec name', declarationName);
             //analyze comments
-            var cbs = new CodeBlockSyntax();
+            let cbs = new CodeBlockSyntax();
             cbs.description = (token.comment) ? token.comment : "No Comment";
             _.each(token.CommentLineReader, _.bind(this.analyzeToken, this, token.codeLine));
+
+            console.log('cbs is', cbs);
             return cbs;
       }
 
@@ -66,33 +66,28 @@ export class AstBuilder {
        * @param codeLine {array} tokenized code line 
        * @param lineToken {object}
        */
-      analyzeToken(codeLine: Array<any>, lineToken: Token, )
-      {
+      analyzeToken(codeLine: Array<any>, lineToken: Token, ) {
             let cs = new CommentSymbol();
             //check the block blockTag
             let blockTag = cs.getBlockTag(lineToken.atValue);
             return this.getDefinitionAST(blockTag, lineToken, codeLine);
       }
 
-      getParametersFromCode(codeTokens): Array<any>
-      {
+      getParametersFromCode(codeTokens): Array<any> {
             var openIndex;
             var closeIndex;
             var discoveredParameters = [];
 
-            codeTokens.forEach(function(token, index){
-                  if(token.type === "paren" && token.value === "(")
-                  {
+            codeTokens.forEach(function (token, index) {
+                  if (token.type === "paren" && token.value === "(") {
                         openIndex = index;
                   }
-                  if(token.type === "paren" && token.value === ")")
-                  {
+                  if (token.type === "paren" && token.value === ")") {
                         closeIndex = index;
                   }
             })
 
-            while(openIndex < closeIndex)
-            {
+            while (openIndex < closeIndex) {
                   discoveredParameters.push(codeTokens[openIndex]);
                   openIndex++;
             }
@@ -104,18 +99,15 @@ export class AstBuilder {
        * Given an array of the first line, returns a name as string, ignores var, function and stops at open parens
        * @param codeTokens {array}
        */
-      getNameFromCode(codeTokens): string
-      {
+      getNameFromCode(codeTokens): string {
             var openIndex = 0;
             var index = 0;
             var closeIndex;
             var names = [];
 
-            for(var i = 0; i < codeTokens.length; i++)
-            {
+            for (var i = 0; i < codeTokens.length; i++) {
                   var token = codeTokens[i];
-                  if(token.type === "paren" && token.value === "(")
-                  {
+                  if (token.type === "paren" && token.value === "(") {
                         openIndex = i;
                         break;
                   }
@@ -123,17 +115,13 @@ export class AstBuilder {
 
             var varIndex = 0;
             //if no params were found, lets go by the var
-            if(openIndex === 0)
-            {
-                  while(index < codeTokens.length)
-                  {
+            if (openIndex === 0) {
+                  while (index < codeTokens.length) {
                         var token = codeTokens[varIndex];
-                        if(token.type === "variableDeclaration")
-                        {
+                        if (token.type === "variableDeclaration") {
                               //get all names after this
                               token = codeTokens[++varIndex];
-                              while(token.type === "number"  || token.type === "name")
-                              {
+                              while (token.type === "number" || token.type === "name") {
                                     names.push(token.value);
                                     token = codeTokens[++varIndex];
                               }
@@ -142,29 +130,26 @@ export class AstBuilder {
                         varIndex++;
                   }
             }
-            while(index < openIndex)
-            {
-                  if(codeTokens[index].type === "name" || codeTokens[index].type === "number")
-                  {
+            while (index < openIndex) {
+                  if (codeTokens[index].type === "name" || codeTokens[index].type === "number") {
                         names.push(codeTokens[index]);
-                  }                  
+                  }
                   openIndex++;
             }
 
-           
+
             return names.join('.');
       }
 
-      getDefinitionAST(blocktag: JsDocBlogTag, token: Token, codeLine: Array<any>):any
-      {
+      getDefinitionAST(blocktag: JsDocBlogTag, token: Token, codeLine: Array<any>): any {
             var result;
             switch (blocktag) {
                   case JsDocBlogTag.alias:
-                  {
-                        //The @alias tag tells JSDoc to pretend that Member A is actually named Member B. For example, when JSDoc processes the following code, it recognizes that foo is a function, then renames foo to bar in the documentation:
-                        //essentially the 'name' found in the codeline should be replaced with the value found in the @alias name value.
-                        break;
-                  }
+                        {
+                              //The @alias tag tells JSDoc to pretend that Member A is actually named Member B. For example, when JSDoc processes the following code, it recognizes that foo is a function, then renames foo to bar in the documentation:
+                              //essentially the 'name' found in the codeline should be replaced with the value found in the @alias name value.
+                              break;
+                        }
                   case JsDocBlogTag.namespace:
                   case JsDocBlogTag.moduleTag:
                   case JsDocBlogTag.lends:
@@ -172,87 +157,87 @@ export class AstBuilder {
                   case JsDocBlogTag.augments:
                   case JsDocBlogTag.augment:
                   case JsDocBlogTag.extends:
-                  {
-                        console.log('namespace found', codeLine);
-                        var name = this.getNameFromCode(codeLine);
-                        console.log('namespace found', name);
-                        result = new Namespace(name);
-                        console.log(result);
-                        break;
-                  }
+                        {
+                              console.log('namespace found', codeLine);
+                              var name = this.getNameFromCode(codeLine);
+                              console.log('namespace found', name);
+                              result = new Namespace(name);
+                              this.nameSpaces.push(result);
+                              break;
+                        }
                   case JsDocBlogTag.classtag:
                   case JsDocBlogTag.constructor:
-                  {
-                        var name = this.getNameFromCode(codeLine);
-                       // result = new ClassDecorator(name);
-                        //todo build class
-                        //needs the name and any params for the constructor.
-                        //needs scope
-                        break;
-                  }
+                        {
+                              var name = this.getNameFromCode(codeLine);
+                              // result = new ClassDecorator(name);
+                              //todo build class
+                              //needs the name and any params for the constructor.
+                              //needs scope
+                              break;
+                        }
                   case JsDocBlogTag.constructs:
-                  {
-                        //This function member will be the constructor for the previous class.
-                        break;
-                  }
+                        {
+                              //This function member will be the constructor for the previous class.
+                              break;
+                        }
                   case JsDocBlogTag.argument:
                   case JsDocBlogTag.param:
                   case JsDocBlogTag.arg:
                   case JsDocBlogTag.property:
                   case JsDocBlogTag.prop:
-                  {
-                        /**example for prop
-                         *                       
-                        * @namespace
-                        * @property {object}  defaults               - The default values for parties.
-                        * @property {number}  defaults.players       - The default number of players.
-                        * @property {string}  defaults.level         - The default level for the party.
-                        * @property {object}  defaults.treasure      - The default treasure.
-                        * @property {number}  defaults.treasure.gold - How much gold the party starts with.                        
-                        var config = {
-                        defaults: {
-                              players: 1,
-                              level:   'beginner',
-                              treasure: {
-                                    gold: 0
+                        {
+                              /**example for prop
+                               *                       
+                              * @namespace
+                              * @property {object}  defaults               - The default values for parties.
+                              * @property {number}  defaults.players       - The default number of players.
+                              * @property {string}  defaults.level         - The default level for the party.
+                              * @property {object}  defaults.treasure      - The default treasure.
+                              * @property {number}  defaults.treasure.gold - How much gold the party starts with.                        
+                              var config = {
+                              defaults: {
+                                    players: 1,
+                                    level:   'beginner',
+                                    treasure: {
+                                          gold: 0
+                                    }
                               }
+                              };
+                               * 
+                               */
+                              //eg config.defaults.players (number)
+                              break;
                         }
-                        };
-                         * 
-                         */
-                        //eg config.defaults.players (number)
-                        break;
-                  }
                   case JsDocBlogTag.returns:
-                  {
-                        //define return type for this token
-                        break;
-                  }
+                        {
+                              //define return type for this token
+                              break;
+                        }
                   case JsDocBlogTag.type:
-                  {
-                        //defines the type, exactly like the curly value in @param {...}
-                        break;
-                  }
-                  case  JsDocBlogTag.public:
-                  {
-                        //this comment line represents a scope of type public
-                        break;
-                  }
+                        {
+                              //defines the type, exactly like the curly value in @param {...}
+                              break;
+                        }
+                  case JsDocBlogTag.public:
+                        {
+                              //this comment line represents a scope of type public
+                              break;
+                        }
                   case JsDocBlogTag.private:
-                  {
-                        //this comment reprents a line of type private
-                        break;
-                  }
-                  case JsDocBlogTag.static: 
-                  {
-                         //a static member.
-                        break;
-                  }
+                        {
+                              //this comment reprents a line of type private
+                              break;
+                        }
+                  case JsDocBlogTag.static:
+                        {
+                              //a static member.
+                              break;
+                        }
                   case JsDocBlogTag.enum:
-                  {
-                        //this is a tricky one...
-                        break;
-                  }
+                        {
+                              //this is a tricky one...
+                              break;
+                        }
 
                   default:
                         break;
@@ -264,8 +249,7 @@ export class AstBuilder {
       * Builds the base AST from which all children AST's will derive
       * @returns AbstractSyntaxTree
       */
-      buildTopLevelTree(): AbstractSyntaxTree
-      {
+      buildTopLevelTree(): AbstractSyntaxTree {
             var ast = new AbstractSyntaxTree();
 
             ast.type = "Program";

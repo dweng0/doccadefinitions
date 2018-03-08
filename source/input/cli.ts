@@ -50,7 +50,13 @@ export class CommandLineInterface {
 
                         self.handleResponse(new Parcel("Generating Abstract Syntax Tree...", MessageLevel.success))
                         self.parseFiles(function(descriptions: Array<ClassDescriptionToken>){
-                          
+                              console.log('descriptions found', descriptions);
+                        
+                              descriptions.forEach((description) => {
+                                    description.blockTokens.forEach((element) => {
+                                          console.log('lost in space...',element);
+                                    });
+                              })
                               self.handleResponse(new Parcel("Performing Transformation..", MessageLevel.success));
                               self.core.tokens = descriptions;
                               
