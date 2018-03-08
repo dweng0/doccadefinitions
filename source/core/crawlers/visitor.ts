@@ -45,7 +45,7 @@ export class Visitor {
                         //essentially the 'name' found in the codeline should be replaced with the value found in the @alias name value.
                         break;
                   }
-                  case JsDocBlogTag.namespaceTag:
+                  case JsDocBlogTag.namespace:
                   case JsDocBlogTag.moduleTag:
                   case JsDocBlogTag.lends:
                   case JsDocBlogTag.memberof:

@@ -11,15 +11,15 @@ export enum JsDocBlogTag {
     constructor, //same as above
     constructs, //This function member will be the constructor for the previous class.
     constant, //Document an object as a constant.
-    consttag,
-    defaultTag, //document the default value
+    const,
+    default, //document the default value
     enum, //Document a collection of related properties.
     exports, //Identify the member that is exported by a JavaScript module.
     lends,
     memberof, //This symbol belongs to a parent symbol.
     moduleTag,//Document a JavaScript module.
     name, //document the name of an object
-    namespaceTag, //Document a namespace object.
+    namespace, //Document a namespace object.
     param, //Document the parameter to a function.
     arg, //Document the parameter to a function.
     argument, //Document the parameter to a function.
@@ -70,7 +70,9 @@ export class CommentSymbol {
 
     getBlockTag(tag: string): JsDocBlogTag
     {
-        var tagAsEnum: JsDocBlogTag = (<any>JsDocBlogTag)[tag];
+        var tagAsEnum: JsDocBlogTag = JsDocBlogTag[tag];
+        console.log('in ', tag);
+        console.log('out ', tagAsEnum)
         return tagAsEnum;
     }
 }

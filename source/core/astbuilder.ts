@@ -28,11 +28,7 @@ export class AstBuilder {
        */
       constructor(tokens: Array<ClassDescriptionToken>)
       {
-            debugger
-            const as = fromPath('C:\\Users\\Skippy\\Documents\\Development\\doccadefinitions\\source\\core\\astbuilder.ts');
-            console.log(as);
-
-            var baseAst = this.buildTopLevelTree();
+            let baseAst = this.buildTopLevelTree();
 
             tokens.forEach(function(token){
                   var ast = new AbstractSyntaxTree();
@@ -72,13 +68,10 @@ export class AstBuilder {
        */
       analyzeToken(codeLine: Array<any>, lineToken: Token, )
       {
-
-            var cs = new CommentSymbol();
-
+            let cs = new CommentSymbol();
             //check the block blockTag
-            var blockTag = cs.getBlockTag(lineToken.atValue);
-           // var 
-            var branchForTag = this.getDefinitionAST(blockTag, lineToken, codeLine);
+            let blockTag = cs.getBlockTag(lineToken.atValue);
+            return this.getDefinitionAST(blockTag, lineToken, codeLine);
       }
 
       getParametersFromCode(codeTokens): Array<any>
@@ -172,7 +165,7 @@ export class AstBuilder {
                         //essentially the 'name' found in the codeline should be replaced with the value found in the @alias name value.
                         break;
                   }
-                  case JsDocBlogTag.namespaceTag:
+                  case JsDocBlogTag.namespace:
                   case JsDocBlogTag.moduleTag:
                   case JsDocBlogTag.lends:
                   case JsDocBlogTag.memberof:
@@ -180,9 +173,11 @@ export class AstBuilder {
                   case JsDocBlogTag.augment:
                   case JsDocBlogTag.extends:
                   {
-                        console.log('namespace found');
+                        console.log('namespace found', codeLine);
                         var name = this.getNameFromCode(codeLine);
+                        console.log('namespace found', name);
                         result = new Namespace(name);
+                        console.log(result);
                         break;
                   }
                   case JsDocBlogTag.classtag:

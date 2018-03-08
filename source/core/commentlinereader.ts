@@ -57,7 +57,7 @@ export class CommentLineReader
        */
       getDocDeclaration(input: string, index: number): string
       {
-             let LETTERSANDNUMBERS = /[a-zA-Z0-9]/;
+            let LETTERSANDNUMBERS = /[a-zA-Z0-9]/;
             let char = input[index];
             let value = '' ;
             //looking for @

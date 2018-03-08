@@ -12,10 +12,10 @@ module.exports = function(grunt) {
     options: {
       files: ['package.json'],
       updateConfigs: [],
-      commit: true,
+      commit: false,
       commitMessage: 'Release v%VERSION%',
       commitFiles: ['package.json'],
-      createTag: true,
+      createTag: false,
       tagName: 'v%VERSION%',
       tagMessage: 'Version %VERSION%',
       push: false,
