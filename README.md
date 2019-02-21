@@ -1,5 +1,9 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com) [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 
+## Development on this is paused, the end goal is to take the DD AST and transpile it into the typescript AST such that the typescript compiler can understand it. 
+## At current the typescript AST is either not defined or microsoft are not willing to share it. As a result, development can go no further :(
+
+
 ![Docca Definitions](./logo.png)
 # Docca Definitions
 >Definately Documented, Definately Typed.
