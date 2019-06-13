@@ -1,13 +1,14 @@
 {
     "version": "0.2.0",
     "configurations": [
+
         {
             "name": "Launch",
             "type": "node",
             "request": "launch",
             "program": "${workspaceRoot}\\dist\\index.js",
             "stopOnEntry": false,
-            "args": ["compile", "-f", "C:\\Users\\Skippy\\Documents\\Development\\doccadefinitions\\tests"],
+            "args": ["transpile", "-f", "${workspaceRoot}\\tests"],
             "cwd": "${workspaceRoot}\\dist",
             "preLaunchTask": null,
             "runtimeExecutable": null,

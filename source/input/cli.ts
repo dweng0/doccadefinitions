@@ -8,7 +8,6 @@ import  ToECMA from '../transpilers/toecma';
 import {Main} from '../input/controller';
 import {MessageLevel} from '../models/parcel';
 import {Parcel} from '../models/parcel';
-import { ClassDescriptionToken } from '../models/classdescriptionfile'; 
 
 /**
  * Handles command line interface controls
