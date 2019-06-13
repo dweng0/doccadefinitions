@@ -1,73 +1,32 @@
 import * as _ from 'underscore';
-import * as program from 'commander';
 import * as colors from 'colors';
 
 import { CommentParser } from '../core/commentparser';
-import  ToECMA from '../transpilers/toecma';
-
-import {Main} from '../input/controller';
 import {MessageLevel} from '../models/parcel';
 import {Parcel} from '../models/parcel';
-import { ClassDescriptionToken } from '../models/classdescriptionfile'; 
 
-/**
- * Handles command line interface controls
- */
-export class CommandLineInterface {
-      isVerbose:true;
-      core: Main
+import {Main} from '../input/controller';
 
-      constructor(options?: any)
-      {
-            this.isVerbose = (options) ? options.isVerbose : true;
-            this.core = new Main();
-      }
+export default class BaseTranspiler {
 
-      /**
-       * Start the CLI interface
-       */
-      start()
-      {
-            var self = this;
-            program
-                  .version(this.core.version)
-                  .option('-c, --chdir [path]', 'change the read directory')
-                  .option('-o, --choutput [path]', 'change the write directory')
-                  .option('-l, --lang [lang]', 'set the markup language to compile from')           
-                  .option('-v, --verbose', 'be noisey')
-                        
-            program
-                  .command('transpile')
-                  .option('-f --files [filename]',  'Compile only a files specified (comma seperated), you can specify just a directory or a file')
-                  .option('-r --recursive', 'Deep (default)')
-                  .description('Transpile all files in this directory and sub directories')
-                  .action( command => { new ToECMA(command);});
+    parser: any;
+    isVerbose: boolean;
+    core: Main;
 
-            program
-                  .command('list')
-                  .description('Lists all files to be compiled')
-                  .action(_.bind(this.performListCommand, this))
-                  .option('-f, --files', 'List files to be compiled (default)')
-                  .option('-w, --outDir', 'list output directory')
-                  .option('-r, --inDir', 'list input direactory');
-                  
-            program.parse(process.argv);
-         
-      }
+    constructor(commander, options)
+    {
+        this.isVerbose = (options) ? options.isVerbose : true;
+        this.core = new Main();
+    }
 
-      generateCodeFromAST()
-      {
-            
-      }
-
-      /**
-       * Transform syntax tree into a more legible syntax tree
-       * @param syntaxTree 
-       */
-      transformAST(syntaxTree)
-      {
-            
-      }
+    /**
+     * Transform syntax tree into a more legible syntax tree
+     * @param syntaxTree 
+     */
+    transformAST(syntaxTree)
+    {
+        //todo
+    }
 
       /**
        * Take all files, parses them into tokens
@@ -80,6 +39,13 @@ export class CommandLineInterface {
                   callback(lexicalParser.getResults());
             });
           
+      }
+
+      //wrap function so children don't need to import parcel when being used
+      respond(message: string, level?: MessageLevel)
+      {
+        level = level || MessageLevel.debug;
+        return this.handleResponse(new Parcel(message, level));
       }
 
       performChangeDirCommand(path, command)
@@ -174,5 +140,4 @@ export class CommandLineInterface {
             console.log(colors.bgRed(messageObj.message));        
             }
       }
-
 }
