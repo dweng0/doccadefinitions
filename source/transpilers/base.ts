@@ -116,7 +116,7 @@ export default class BaseTranspiler {
 	 * @param messageObj
 	 */
 	handleResponse(messageObj: Parcel): void {
-		messageObj.level = messageObj.level || MessageLevel.grey;
+		messageObj.level = messageObj.level || MessageLevel.debug;
 		if (messageObj.level === MessageLevel.success) {
 			if (this.isVerbose) {
 				console.log(colors.green(messageObj.message));
@@ -130,8 +130,6 @@ export default class BaseTranspiler {
 		if (messageObj.level === MessageLevel.warning) {
 			console.log(colors.bgYellow(messageObj.message.bgYellow));
 		}
-		if (messageObj.level === MessageLevel.failed) {
-			console.log(colors.bgRed(messageObj.message));
-		}
+		
 	}
 }

@@ -22,6 +22,7 @@ define(function(require) {
 
 	const unauthorizedDialogOnce = _.once(function(session) {
 		console.log("Display unauthorized dialog");
+		//  then, bind (name) params(binds params
 		UnauthorizedDialog().show().then(_.bind(session.destroy, session));
 	});
 
