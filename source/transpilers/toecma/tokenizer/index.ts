@@ -1,4 +1,5 @@
 import * as _ from 'underscore';
+import * as colors from 'colors';
 
 const NEW_LINE = /[\r\n]/;
 const WHITESPACE = /\s/;
@@ -6,20 +7,42 @@ const NUMBERS = /[0-9]/;
 const DECLARABLE_CHARACTERS =  /[A-Za-z_.$]/i;
 
 export class LexicalAnalyzer {
+	verbose: boolean = false;
+	log(message: string) {
+		if(this.verbose)
+		{
+			return this.log(message);
+		}
+	}
+	constructor(options)
+	{
+		if(options.verbose)
+		{
+			this.verbose = true;
+		}
+	}
 	start(input, current, exitOn) {
 		current = current || 0;
 		let tokens = [];
 		let char = input[current];
 
 		while (current < input.length) {
+			
 			char = input[current];
-
+			
 			if(char === exitOn)
 			{
+					this.log(colors.yellow(`exiting ${exitOn}`));
+				if(exitOn === "}" && input[current + 1] === ';')
+				{
+					current = current++;
+				}
+
 				break;
 			}
 			//paren
 			if (char === '(') {
+				this.log(colors.yellow("entering " + char));
 				char = input[++current];
 				let results = this.start(input, current, ')');
 				tokens.push({ type: 'params', value: results.tokens});
@@ -30,6 +53,7 @@ export class LexicalAnalyzer {
 
 			//arr
 			if (char === '[') {
+				this.log(colors.yellow("entering " + char));
 				char = input[++current];
 				let results = this.start(input, current, ']');
 				tokens.push({ type: 'array', value: results.tokens});
@@ -40,6 +64,7 @@ export class LexicalAnalyzer {
 
 			//body
 			if (char === '{') {
+				this.log(colors.yellow("entering " + char));
 				char = input[++current];
 				let results = this.start(input, current, '}');
 				tokens.push({ type: 'codeblock', value: results.tokens});
@@ -102,10 +127,8 @@ export class LexicalAnalyzer {
 					value += char;
 					char = input[++current];
 				}
-					if(value === 'console.log')
-					{
-						debugger;
-					}
+				this.log(colors.bgCyan(value));
+					
 				 //check name for reserved
 				 switch(value)
 				 {
@@ -113,6 +136,7 @@ export class LexicalAnalyzer {
 					case "var":
 					case "let":
 					{
+						this.log(colors.yellow("entering " + char));
 						const results = this.start(input, current, ';');
 							tokens.push({type: 'declaration', value: results.tokens});
 							current = results.current;
@@ -124,6 +148,7 @@ export class LexicalAnalyzer {
 					case "delete":
 					case "in":
 					{
+						this.log(colors.yellow("entering " + char));
 						const results = this.start(input, current, ';');
 						tokens.push({type: 'operator', value: results.tokens});
 						current = results.current;
@@ -146,6 +171,7 @@ export class LexicalAnalyzer {
                 continue;
             }
             if (char === ';') {
+				this.log(colors.yellow("newline" + char));
                 tokens.push({ type: 'newLine', value: char });
 				char = input[++current];
                 continue;
@@ -165,8 +191,8 @@ export class LexicalAnalyzer {
 				continue;
 			}
 
-			//multi line comment
-			if(char === "/" && input[current + 1] === "*" && input[current + 2] === "*")
+			//multi line comment, should be two astrix, but since ...some people... use /* instead of  /**, we catch both
+			if(char === "/" && input[current + 1] === "*")
 			{
 				let value = ''
 				const closing = "*/";
@@ -210,6 +236,9 @@ export class LexicalAnalyzer {
 						continue;
 					}
 			}
+
+		//finally, people end their code in different ways, we log ; because there's a chance its the last 'thing'
+		this.log(colors.red(`DEBUG current curser ${current}, last cursor ${input.length} current char ${char}, recursive exit condition is ${exitOn}`));
 		throw new TypeError('unknown var type: ' + char);
 	}
 	return { tokens, current };

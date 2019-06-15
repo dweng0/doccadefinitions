@@ -1,20 +1,24 @@
 import BaseTranspiler from '../base';
 import { LexicalAnalyzer } from './tokenizer';
+import _ = require('underscore');
 import { MessageLevel } from '../../models/parcel';
 
 export default class ToECMA extends BaseTranspiler {
-	syntaxTree: Array<any>;
+	syntaxTree: Array<any> = [];
 
 	constructor(command: any, options?: any) {
 		super(command, options);
-		this.syntaxTree = [];
-		const responseText = command.files ? 'Getting file: ' + command.files : 'Getting files...';
+		options = options || {};
 
+		_.extend(options, {verbose: command.verbose});
+		const responseText = command.files ? 'Getting file: ' + command.files : 'Getting files...';		
+		
 		this.respond(responseText);
 		this.getFiles(command.files, command.recursive);
 
 		//allow something else to pass in the lexical parser. must have an entry point of 'start'
-		this.parser = (options && options.parser) ? new options.Parser() : new LexicalAnalyzer();
+		this.parser = (options && options.parser) ? new options.Parser() : new LexicalAnalyzer(options);
+
 		this.respond('Generating Abstract Syntax Tree...');
 		this.getSyntaxTreeFromFiles(this.core.eligibleFiles);
 	}
@@ -33,16 +37,17 @@ export default class ToECMA extends BaseTranspiler {
 
 		Promise.all(promises)
 			.then((results) => {
-				results.forEach(data => {
-					debugger;
-					this.respond(`... parsing into syntax tree`);
-					this.syntaxTree.push( 
-						{
+				this.syntaxTree = results.map(data => {
+					this.respond(`... parsing ${data.name} into syntax tree`);
+					return {
 							path: data.name,
 							tokens: this.parser.start(data.contents)
 						}
-					)
 				});
+				this.respond('file(s) parsed', MessageLevel.success);
+			})
+			.catch((err) => {
+				this.respond('failed to parse file(s)', 3);
 			});
 	}
 }

@@ -1,6 +1,5 @@
 import * as _ from 'underscore';
 import * as colors from 'colors';
-import * as shell from 'shelljs';
 
 import { MessageLevel } from '../models/parcel';
 import { Parcel } from '../models/parcel';
@@ -8,6 +7,7 @@ import { Parcel } from '../models/parcel';
 import { Main } from '../input/controller';
 
 import * as fs from 'fs';
+import * as path from 'path';
 
 export default class BaseTranspiler {
 	parser: any;
@@ -19,61 +19,10 @@ export default class BaseTranspiler {
 		this.core = new Main();
 	}
 
-	/**
-	 * Transform syntax tree into a more legible syntax tree
-	 * @param syntaxTree
-	 */
-	transformAST(syntaxTree) {
-		//todo
-	}
-
 	//wrap function so children don't need to import parcel when being used
 	respond(message: string, level?: MessageLevel) {
 		level = level || MessageLevel.debug;
 		return this.handleResponse(new Parcel(message, level));
-	}
-
-	performChangeDirCommand(path, command) {
-		if (arguments.length == 1) {
-			this.handleResponse(
-				new Parcel(
-					'No path was set, specify a path to change to',
-					MessageLevel.failed
-				)
-			);
-			return;
-		}
-
-		this.isVerbose = command.parent.verbose;
-		var response = new Parcel();
-		if (command.inDir) {
-			response = this.core.setReadDir(path);
-		} else {
-			response = this.core.setWriteDir(path);
-		}
-
-		this.handleResponse(response);
-	}
-
-	performListCommand(command) {
-		this.isVerbose = true;
-		if (command.outDir) {
-			this.handleResponse(
-				new Parcel(
-					'Output directory: ' + this.core.writeDir,
-					MessageLevel.debug
-				)
-			);
-		} else if (command.inDir) {
-			this.handleResponse(
-				new Parcel(
-					'Input directory: ' + this.core.readDir,
-					MessageLevel.debug
-				)
-			);
-		} else {
-			this.getFiles();
-		}
 	}
 
 	/**
@@ -106,7 +55,11 @@ export default class BaseTranspiler {
 				{
 					return reject(err);
 				}
-				resolve({name: file, contents: data.toString()});
+				if(path.extname(file) === '.js')
+				{
+					resolve({name: file, contents: data.toString()});
+				}
+
 			});
 		});
 	}
